@@ -6,4 +6,10 @@ type (
 	PORT string
 )
 
-func NewPort() PORT { return PORT(os.Getenv("PORT")) }
+func NewPort() PORT {
+	v := os.Getenv("PORT")
+	if v == "" {
+		v = "3000"
+	}
+	return PORT(v)
+}
