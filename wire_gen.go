@@ -8,6 +8,12 @@ package main
 
 import (
 	"doc-api/api"
+	"doc-api/api/controller"
+	"doc-api/api/db"
+	"doc-api/api/entity"
+	"doc-api/api/gateway"
+	"doc-api/api/usecase"
+	"doc-api/api/web"
 	"doc-api/env"
 )
 
@@ -15,6 +21,23 @@ import (
 
 func InitializeServer() api.Server {
 	port := env.NewPort()
-	server := api.NewServer(port)
+	jwt_SECRET_KEY := env.NewJwtSecretKey()
+	jwtToken := entity.NewJwtToken(jwt_SECRET_KEY)
+	gormDB := db.NewDBConnection()
+	authRepository := gateway.NewAuthRepository(gormDB)
+	authUser := usecase.NewAuthUserService(jwtToken, authRepository)
+	authUserMiddleware := controller.NewAuthUserMiddleware(authUser)
+	helloHandler := controller.NewHelloHandler()
+	hash_SALT := env.NewHashSalt()
+	hash_STRETCH := env.NewHashStretch()
+	hashing := entity.NewHashing(hash_SALT, hash_STRETCH)
+	loginRepository := gateway.NewUserRepository(gormDB)
+	loginService := usecase.NewLoginService(hashing, jwtToken, loginRepository)
+	loginHandler := controller.NewLoginHandler(loginService)
+	signupRepository := gateway.NewSignupRepository(gormDB)
+	signupService := usecase.NewSignupService(hashing, signupRepository)
+	signupController := controller.NewSignupHandler(signupService)
+	router := web.NewRouter(jwt_SECRET_KEY, authUserMiddleware, helloHandler, loginHandler, signupController)
+	server := api.NewServer(port, router)
 	return server
 }

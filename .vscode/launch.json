@@ -11,8 +11,8 @@
             "port": 2345,
             "host": "localhost",
             "cwd": "${workspaceRoot}/cmd",
-            "env": {},
-            "args": [],
+            // "env": {},
+            // "args": [],
         }
     ]
 }

@@ -1,8 +1,8 @@
 package api
 
 import (
+	"doc-api/api/web"
 	"doc-api/env"
-	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -10,13 +10,15 @@ import (
 
 type (
 	Server struct {
-		PORT string
+		PORT   string
+		router web.Router
 	}
 )
 
-func NewServer(port env.PORT) Server {
+func NewServer(port env.PORT, router web.Router) Server {
 	return Server{
-		PORT: string(port),
+		PORT:   string(port),
+		router: router,
 	}
 }
 
@@ -27,7 +29,7 @@ func (s *Server) Run() {
 	e.Use(middleware.Recover())
 
 	// routes
-	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "Hello world!") })
+	s.router.RegisterEndpoint(e)
 
 	e.Logger.Fatal(e.Start(":" + s.PORT))
 }
