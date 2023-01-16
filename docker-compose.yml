@@ -1,6 +1,7 @@
 version: '3.7'
 services:
   app:
+    container_name: doc-api
     build: .
     ports:
       - "8888:${PORT}"
@@ -11,3 +12,17 @@ services:
     command: air -c .air.toml
     env_file:
       - ./.env
+  db:
+    container_name: doc-api_db
+    build:
+      context: .
+      dockerfile: ./.docker/db/Dockerfile
+    volumes:
+      - ./.docker/db/init:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres # super user
+      - POSTGRES_DB=doc-api # db name
+      - POSTGRES_PASSWORD=secret
+    
