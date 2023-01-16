@@ -23,6 +23,6 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_USER=postgres # super user
-      - POSTGRES_DB=doc-api # db name
+      - POSTGRES_DB=doc-db # db name
       - POSTGRES_PASSWORD=secret
     
