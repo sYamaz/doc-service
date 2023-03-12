@@ -7,6 +7,7 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 func NewDBConnection(
@@ -14,18 +15,24 @@ func NewDBConnection(
 	port env.DB_PORT,
 	dbname env.DB_NAME,
 	user env.DB_USER,
-	password env.DB_PASS,
-	schema env.DB_SCHEMA) *gorm.DB {
+	password env.DB_PASS) *gorm.DB {
+
+	schemaName := "user_schema"
+
 	dsn := strings.Join([]string{
 		"host=" + string(host),
 		"port=" + string(port),
 		"dbname=" + string(dbname),
 		"user=" + string(user),
 		"password=" + string(password),
-		"search_path=" + string(schema),
+		"search_path=" + schemaName,
 		"sslmode=disable",
 	}, " ")
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			TablePrefix: schemaName + ".",
+		},
+	})
 	if err != nil {
 		panic(err)
 	}

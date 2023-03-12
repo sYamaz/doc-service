@@ -29,7 +29,6 @@ func InitializeServer() api.Server {
 		env.NewDBName,
 		env.NewDBPass,
 		env.NewDBUser,
-		env.NewDBSchema,
 		// server
 		api.NewServer,
 		// web

@@ -11,12 +11,11 @@ type (
 	HASH_STRETCH   int
 	JWT_SECRET_KEY string
 
-	DB_HOST   string
-	DB_PORT   string
-	DB_NAME   string
-	DB_PASS   string
-	DB_USER   string
-	DB_SCHEMA string
+	DB_HOST string
+	DB_PORT string
+	DB_NAME string
+	DB_PASS string
+	DB_USER string
 )
 
 func NewPort() PORT {
@@ -61,8 +60,4 @@ func NewDBPass() DB_PASS {
 
 func NewDBUser() DB_USER {
 	return DB_USER(os.Getenv("DB_USER"))
-}
-
-func NewDBSchema() DB_SCHEMA {
-	return DB_SCHEMA(os.Getenv("DB_SCHEMA"))
 }
