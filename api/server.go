@@ -3,6 +3,7 @@ package api
 import (
 	"doc-api/api/web"
 	"doc-api/env"
+	"log"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -10,22 +11,26 @@ import (
 
 type (
 	Server struct {
-		PORT   string
-		router web.Router
+		PORT          string
+		router        web.Router
+		loggerFactory web.LoggerFactory
 	}
 )
 
-func NewServer(port env.PORT, router web.Router) Server {
+func NewServer(port env.PORT, router web.Router, loggerFactory web.LoggerFactory) Server {
 	return Server{
-		PORT:   string(port),
-		router: router,
+		PORT:          string(port),
+		router:        router,
+		loggerFactory: loggerFactory,
 	}
 }
 
 func (s *Server) Run() {
 	e := echo.New()
+	log.SetFlags(0)
 
-	e.Use(middleware.Logger())
+	e.Use(s.loggerFactory.Middleware())
+	e.Use(middleware.RequestID())
 	e.Use(middleware.Recover())
 
 	// routes

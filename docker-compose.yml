@@ -10,10 +10,20 @@ services:
       - ./:/app
     working_dir: /app
     command: air -c .air.toml
+    environment:
+      - "PORT:${PORT}"
+      - "HASH_SALT:${HASH_SALT}"
+      - "HASH_STRETCH:${HASH_STRETCH}"
+      - "DB_HOST:${DB_HOST}"
+      - "DB_PORT:${DB_PORT}"
+      - "DB_NAME:${DB_NAME}"
+      - "DB_USER:${DB_USER}"
+      - "DB_PASS:${DB_PASS}"
     env_file:
       - ./.env
   db:
     container_name: doc-api_db
+    hostname: ${DB_HOST}
     build:
       context: .
       dockerfile: ./.docker/db/Dockerfile
@@ -22,7 +32,7 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=postgres # super user
-      - POSTGRES_DB=doc-db # db name
-      - POSTGRES_PASSWORD=secret
+      - POSTGRES_USER=${POSTGRES_SUPERUSER} # super user
+      - POSTGRES_DB=${POSTGRES_DBNAME} # db name
+      - POSTGRES_PASSWORD=${POSTGRES_SUPERUSERPASS} # super user password
     

@@ -24,23 +24,33 @@ func InitializeServer() api.Server {
 		env.NewJwtSecretKey,
 		env.NewHashSalt,
 		env.NewHashStretch,
+		env.NewDBHost,
+		env.NewDBPort,
+		env.NewDBName,
+		env.NewDBPass,
+		env.NewDBUser,
+		env.NewDBSchema,
 		// server
 		api.NewServer,
 		// web
 		web.NewRouter,
+		web.NewCustomLogger,
 		// controller
 		controller.NewAuthUserMiddleware,
 		controller.NewHelloHandler,
 		controller.NewLoginHandler,
-		controller.NewSignupHandler,
+		controller.NewDocHandler,
+		controller.NewUserHandler,
 		// gateway
-		gateway.NewUserRepository,
-		gateway.NewSignupRepository,
+		gateway.NewLoginRepository,
 		gateway.NewAuthRepository,
+		gateway.NewDocRepository,
+		gateway.NewUserRepository,
 		// usecase
 		usecase.NewLoginService,
-		usecase.NewSignupService,
 		usecase.NewAuthUserService,
+		usecase.NewDocService,
+		usecase.NewUserService,
 		// entity
 		entity.NewHashing,
 		entity.NewJwtToken,

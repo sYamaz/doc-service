@@ -12,7 +12,7 @@ type (
 		service usecase.LoginService
 	}
 	LoginHandler interface {
-		PostLogin(ctx echo.Context) error
+		Post(ctx echo.Context) error
 	}
 
 	loginOutputPort struct {
@@ -26,19 +26,19 @@ func NewLoginHandler(service usecase.LoginService) LoginHandler {
 	}
 }
 
-func (h *loginHandler) PostLogin(ctx echo.Context) error {
+func (h *loginHandler) Post(ctx echo.Context) error {
 	type Body struct {
-		userId   string
-		password string
+		UserId   string
+		Password string
 	}
 
 	// body paramの抽出
 	body := new(Body)
 	if err := ctx.Bind(body); err != nil {
-		return err
+		return badrequestError(ctx, err)
 	}
 
-	return h.service.Login(body.userId, body.password, &loginOutputPort{ctx: ctx})
+	return h.service.Login(body.UserId, body.Password, &loginOutputPort{ctx: ctx})
 }
 
 func (o *loginOutputPort) Success(token string, admin bool, err error) error {

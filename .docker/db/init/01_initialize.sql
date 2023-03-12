@@ -1,2 +1,2 @@
-CREATE USER app_admin;
-CREATE USER app_user;
+CREATE USER app_admin PASSWORD 'secret_admin';
+CREATE USER app_user PASSWORD 'secret_user';

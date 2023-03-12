@@ -10,7 +10,7 @@ type (
 	helloHandler struct{}
 
 	HelloHandler interface {
-		GetHello(ctx echo.Context) error
+		Get(ctx echo.Context) error
 	}
 )
 
@@ -18,6 +18,6 @@ func NewHelloHandler() HelloHandler {
 	return &helloHandler{}
 }
 
-func (h *helloHandler) GetHello(ctx echo.Context) error {
+func (h *helloHandler) Get(ctx echo.Context) error {
 	return ctx.String(http.StatusOK, "Hello world!")
 }
