@@ -28,8 +28,8 @@ func NewLoginHandler(service usecase.LoginService) LoginHandler {
 
 func (h *loginHandler) Post(ctx echo.Context) error {
 	type Body struct {
-		UserId   string
-		Password string
+		UserId   string `json:"user_id"`
+		Password string `json:"password"`
 	}
 
 	// body paramの抽出
@@ -43,8 +43,8 @@ func (h *loginHandler) Post(ctx echo.Context) error {
 
 func (o *loginOutputPort) Success(token string, admin bool, err error) error {
 	type Body struct {
-		Token string
-		Admin bool
+		Token string `json:"token"`
+		Admin bool   `json:"admin"`
 	}
 	return o.ctx.JSON(http.StatusOK, Body{Token: token, Admin: admin})
 }

@@ -15,8 +15,8 @@ type (
 
 func (h *userHandler) Post(c echo.Context) error {
 	type Body struct {
-		UserId   string
-		Password string
+		UserId   string `json:"user_id"`
+		Password string `json:"password"`
 	}
 
 	body := new(Body)
