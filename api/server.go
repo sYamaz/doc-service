@@ -32,7 +32,9 @@ func (s *Server) Run() {
 	e.Use(s.loggerFactory.Middleware())
 	e.Use(middleware.RequestID())
 	e.Use(middleware.Recover())
-
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:3000"},
+	}))
 	// routes
 	s.router.RegisterEndpoint(e)
 
